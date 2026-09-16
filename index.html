@@ -171,13 +171,14 @@
   .countdown .lbl{font-size:9.5px;letter-spacing:1.5px;color:var(--muted);margin-top:8px;}
 
   /* PALETA */
-  .palette{display:flex;justify-content:center;gap:26px;margin-top:28px;}
+  .palette{display:flex;justify-content:center;gap:34px;margin-top:30px;}
   .swatch{text-align:center;}
   .swatch i{
     display:block;width:54px;height:54px;border-radius:50%;margin:0 auto 10px auto;
     box-shadow:0 10px 24px -12px rgba(60,60,52,.4);
   }
-  .swatch span{font-size:10.5px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;}
+  .swatch span{font-size:10.5px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;line-height:1.9;}
+  .swatch span b{color:var(--olive-dark);font-weight:500;}
 
   /* MÚSICA */
   .music-card{margin-top:8px;}
@@ -315,19 +316,23 @@
     </div>
   </section>
 
-  <!-- PALETA -->
+  <!-- TRAJE -->
   <section class="reveal" style="padding-top:8px;">
-    <div class="eyebrow">Paleta de cores</div>
-    <div class="title">Branco &amp; <em>verde oliva</em></div>
+    <div class="eyebrow">Traje</div>
+    <div class="title">Esporte <em>fino</em></div>
     <div class="diamond-divider"></div>
-    <p class="small-note" style="max-width:320px;margin:0 auto;">
-      Uma sugestão carinhosa para quem quiser combinar com a nossa festa.<br>
-      Pedimos reservar o branco para a noiva.
-    </p>
-    <div class="palette">
-      <div class="swatch"><i style="background:#ffffff;border:1px solid var(--line);"></i><span>Branco</span></div>
-      <div class="swatch"><i style="background:var(--olive);"></i><span>Verde oliva</span></div>
-      <div class="swatch"><i style="background:var(--olive-dark);"></i><span>Oliva escuro</span></div>
+
+    <div class="card" style="margin-top:8px;">
+      <p class="lead" style="margin-bottom:0;">
+        Pedimos que evitem o branco, reservado à noiva, e o tom de Verde Oliva,
+        reservado às madrinhas. Fora isso, fiquem à vontade para celebrar com
+        elegância e conforto.
+      </p>
+
+      <div class="palette">
+        <div class="swatch"><i style="background:#ffffff;border:1px solid var(--line);"></i><span>Branco<br><b>noiva</b></span></div>
+        <div class="swatch"><i style="background:var(--olive);"></i><span>Verde oliva<br><b>madrinhas</b></span></div>
+      </div>
     </div>
   </section>
 
