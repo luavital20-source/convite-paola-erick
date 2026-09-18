@@ -15,6 +15,17 @@ Convite digital (uma página, feito para celular) do casamento de
 
 - `index.html` — o convite completo (HTML/CSS/JS, sem dependências)
 - `img/` — fotos do casal e do local (veja `img/README.md`)
+- `audio/perfect.mp3` — música que toca no convite
+
+## Música
+
+A música toca **localmente** a partir de `audio/perfect.mp3` — não depende do
+YouTube. Ela começa automaticamente quando a pessoa toca na capa (esse toque é
+o gesto que os celulares, inclusive o iPhone, exigem para liberar o som) e pode
+ser pausada/retomada pelo botão flutuante ou pelo botão da seção *Nossa música*.
+
+Para trocar a música, substitua o arquivo `audio/perfect.mp3` por outro MP3 com
+o mesmo nome (e atualize o nome/artista no `index.html`, na seção *Nossa música*).
 
 ## Como visualizar
 

@@ -205,6 +205,7 @@
     position:fixed;bottom:22px;right:22px;z-index:50;
     display:flex;align-items:center;gap:8px;
     background:var(--card);color:var(--text);text-decoration:none;
+    border:none;cursor:pointer;font-family:inherit;
     border-radius:30px;padding:12px 18px;
     box-shadow:0 10px 30px -10px rgba(60,60,52,.3);
     font-size:10.5px;letter-spacing:1.5px;
@@ -230,8 +231,10 @@
   <div class="names">Paola &amp; Erick</div>
   <div class="sub">17 · 04 · 2027</div>
   <div class="tap">Toque para abrir</div>
-  <div id="ytHolder" style="position:fixed;width:0;height:0;overflow:hidden;left:-100px;"></div>
 </div>
+
+<!-- Música do convite (toca localmente, sem depender do YouTube) -->
+<audio id="song" src="audio/perfect.mp3" loop preload="auto" playsinline></audio>
 
 <div class="wrap">
 
@@ -346,10 +349,10 @@
     <div class="card music-card">
       <div class="song">Perfect</div>
       <div class="artist">Ed Sheeran</div>
-      <a class="btn" href="https://youtu.be/kPhpHvnnn0Q" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-        OUVIR NO YOUTUBE
-      </a>
+      <button class="btn" type="button" id="playSong" style="cursor:pointer;background:transparent;font-family:inherit;">
+        <svg id="playSongIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5v14l11-7z"/></svg>
+        <span id="playSongLabel">TOCAR A MÚSICA</span>
+      </button>
     </div>
   </section>
 
@@ -405,10 +408,10 @@
 
 </div>
 
-<a id="floatMusic" href="https://youtu.be/kPhpHvnnn0Q" target="_blank" rel="noopener">
-  <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
-  NOSSA MÚSICA
-</a>
+<button id="floatMusic" type="button" aria-label="Pausar ou tocar a música">
+  <svg id="floatIcon" viewBox="0 0 24 24" stroke-width="1.5"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
+  <span id="floatLabel">NOSSA MÚSICA</span>
+</button>
 
 <script>
   // Fotos ainda não enviadas: mostra um placeholder elegante no lugar
@@ -420,19 +423,55 @@
     if(img.complete && img.naturalWidth === 0) fail();
   });
 
-  // Splash: fade out + tocar música (YouTube) ao toque
+  // Música local: toca ao tocar na capa (gesto do usuário → funciona em todos
+  // os dispositivos, incluindo iPhone) e alterna com os botões da página.
+  var song = document.getElementById('song');
+  var floatMusic = document.getElementById('floatMusic');
+  var floatIcon = document.getElementById('floatIcon');
+  var floatLabel = document.getElementById('floatLabel');
+  var playSong = document.getElementById('playSong');
+  var playSongIcon = document.getElementById('playSongIcon');
+  var playSongLabel = document.getElementById('playSongLabel');
+
+  var ICON_PLAY = '<path d="M8 5v14l11-7z"/>';
+  var ICON_PAUSE = '<path d="M9 4h3v16H9zM15 4h3v16h-3z"/>';
+  var ICON_NOTE = '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>';
+
+  function syncMusicUI(){
+    var playing = song && !song.paused;
+    if(floatIcon) floatIcon.innerHTML = playing ? ICON_PAUSE : ICON_NOTE;
+    if(floatLabel) floatLabel.textContent = playing ? 'PAUSAR' : 'NOSSA MÚSICA';
+    if(playSongIcon) playSongIcon.innerHTML = playing ? ICON_PAUSE : ICON_PLAY;
+    if(playSongLabel) playSongLabel.textContent = playing ? 'PAUSAR A MÚSICA' : 'TOCAR A MÚSICA';
+  }
+
+  function playMusic(){
+    if(!song) return;
+    var p = song.play();
+    if(p && p.catch) p.catch(function(){});
+  }
+
+  function toggleMusic(){
+    if(!song) return;
+    if(song.paused) playMusic(); else song.pause();
+  }
+
+  if(song){
+    song.addEventListener('play', syncMusicUI);
+    song.addEventListener('pause', syncMusicUI);
+  }
+  if(floatMusic) floatMusic.addEventListener('click', toggleMusic);
+  if(playSong) playSong.addEventListener('click', toggleMusic);
+
+  // Splash: fade out + tocar a música ao toque
   var preloader = document.getElementById('preloader');
   preloader.addEventListener('click', function(){
     preloader.classList.add('hidden');
-    try {
-      var holder = document.getElementById('ytHolder');
-      if (holder && !holder.dataset.on) {
-        holder.dataset.on = '1';
-        holder.innerHTML = '<iframe width="1" height="1" src="https://www.youtube.com/embed/kPhpHvnnn0Q?autoplay=1&loop=1&playlist=kPhpHvnnn0Q&controls=0" allow="autoplay" frameborder="0"></iframe>';
-      }
-    } catch(e){}
-    document.getElementById('floatMusic').classList.add('show');
+    playMusic();
+    floatMusic.classList.add('show');
   });
+
+  syncMusicUI();
 
   // Contagem regressiva até 17/04/2027 às 16h (horário de Brasília)
   var target = new Date('2027-04-17T16:00:00-03:00').getTime();
